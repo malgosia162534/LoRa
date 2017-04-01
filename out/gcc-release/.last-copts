@@ -1,0 +1,1 @@
+-DWITH_QTENV -DWITH_OSG -DWITH_TKENV -DXMLPARSER=libxml -DWITH_PARSIM -DWITH_NETBUILDER  -O2 -DNDEBUG=1 -O0   -isystem /usr/include -isystem /mingw32/include -Wno-deprecated-register -fno-stack-protector  -I. -IC:/omnetpp-5.0/include

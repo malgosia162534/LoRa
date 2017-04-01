@@ -1,0 +1,112 @@
+version 2
+run PureAlohaExperiment-0-20170328-10:52:08-5508
+attr configname PureAlohaExperiment
+attr datetime 20170328-10:52:08
+attr experiment PureAlohaExperiment
+attr inifile omnetpp.ini
+attr iterationvars "$numHosts=10, $mean=1"
+attr iterationvars2 "$numHosts=10, $mean=1, $repetition=0"
+attr mean 1
+attr measurement "$numHosts=10, $mean=1"
+attr network simulations.Lora
+attr numHosts 10
+attr processid 5508
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+param Lora.endDevice[*].iaTime "exponential(${mean=1,2,3,4,5..9 step 2}s)"
+param Lora.endDevice[*].pkLenBits 952b
+param Lora.endDevice[*].radioDelay 10ms
+param Lora.numHosts 20
+param Lora.slotTime 0s
+param Lora.txRate 9.6kbps
+
+scalar . 	mean 	1
+scalar . 	numHosts 	10
+scalar Lora.gateway 	duration 	3724.5171750155
+statistic Lora.gateway 	collisionLength:histogram
+field count 8562
+field mean 0.19843763453666
+field stddev 0.08806340691994
+field sum 1699.0230269028
+field sqrsum 403.5420663898
+field min 0.099194156389
+field max 0.901956987425
+attr title  "collision length, histogram"
+bin	-INF	0
+bin	-0.1301664358415	0
+bin	-0.099544363841567	0
+bin	-0.068922291841633	0
+bin	-0.0383002198417	0
+bin	-0.0076781478417667	0
+bin	0.022943924158167	0
+bin	0.0535659961581	0
+bin	0.084188068158033	924
+bin	0.11481014015797	1766
+bin	0.1454322121579	1599
+bin	0.17605428415783	1374
+bin	0.20667635615777	829
+bin	0.2372984281577	615
+bin	0.26792050015763	448
+bin	0.29854257215757	286
+bin	0.3291646441575	213
+bin	0.35978671615743	163
+bin	0.39040878815737	96
+bin	0.4210308601573	84
+bin	0.45165293215723	41
+bin	0.48227500415717	42
+bin	0.5128970761571	24
+bin	0.54351914815703	24
+bin	0.57414122015697	8
+bin	0.6047632921569	9
+bin	0.63538536415683	6
+bin	0.66600743615677	3
+bin	0.6966295081567	2
+bin	0.72725158015663	2
+bin	0.75787365215657	0
+bin	0.7884957241565	4
+scalar Lora.gateway 	collisionLength:mean 	0.19843763453666
+attr title  "collision length, mean"
+scalar Lora.gateway 	collisionLength:sum 	1699.0230269028
+attr title  "collision length, sum"
+scalar Lora.gateway 	collisionLength:max 	0.901956987425
+attr title  "collision length, max"
+statistic Lora.gateway 	collisionMultiplicity:histogram
+field count 8562
+field mean 3.3099743050689
+field stddev 1.7271317996944
+field sum 28340
+field sqrsum 119342
+field min 2
+field max 17
+attr source  collision
+attr title  "collision multiplicity, histogram"
+bin	-INF	0
+bin	-2	0
+bin	-1	0
+bin	0	0
+bin	1	0
+bin	2	3713
+bin	3	2061
+bin	4	1222
+bin	5	680
+bin	6	400
+bin	7	198
+bin	8	128
+bin	9	72
+bin	10	44
+bin	11	17
+bin	12	12
+bin	13	15
+scalar Lora.gateway 	collidedFrames:last 	28340
+attr source  sum(collision)
+attr title  "collided frames, last"
+scalar Lora.gateway 	channelUtilization:last 	0.15580122786359
+attr interpolationmode  linear
+attr source  timeavg(receive)
+attr title  "channel utilization, last"
+scalar Lora.gateway 	receivedFrames:last 	5851
+attr source  sum(receive)
+attr title  "received frames, last"

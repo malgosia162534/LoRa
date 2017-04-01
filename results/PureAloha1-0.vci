@@ -1,0 +1,129 @@
+file 3884 1490649030                                            
+version 2
+run PureAloha1-0-20170327-23:10:21-2844
+attr configname PureAloha1
+attr datetime 20170327-23:10:21
+attr experiment PureAloha1
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvars2 $repetition=0
+attr measurement ""
+attr network simulations.Lora
+attr processid 2844
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+param Lora.endDevice[*].iaTime exponential(2s)
+param Lora.endDevice[*].pkLenBits 952b
+param Lora.endDevice[*].radioDelay 10ms
+param Lora.numHosts 20
+param Lora.slotTime 0s
+param Lora.txRate 9.6kbps
+
+vector 0  Lora.gateway  serverChannelState:vector  ETV
+attr enum  IDLE=0,TRANSMISSION=1,COLLISION=2
+attr source  channelState
+attr title  "Channel state, vector"
+vector 1  Lora.endDevice[0]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 2  Lora.endDevice[1]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 3  Lora.endDevice[2]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 4  Lora.endDevice[3]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 5  Lora.endDevice[4]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 6  Lora.endDevice[5]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 7  Lora.endDevice[6]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 8  Lora.endDevice[7]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 9  Lora.endDevice[8]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 10  Lora.endDevice[9]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 11  Lora.endDevice[10]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 12  Lora.endDevice[11]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 13  Lora.endDevice[12]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 14  Lora.endDevice[13]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 15  Lora.endDevice[14]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 16  Lora.endDevice[15]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 17  Lora.endDevice[16]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 18  Lora.endDevice[17]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 19  Lora.endDevice[18]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+vector 20  Lora.endDevice[19]  radioState:vector  ETV
+attr enum  IDLE=0,TRANSMIT=1
+attr source  state
+attr title  "Radio state, vector"
+0	3549 75 0 6 0 0.646712281684 4 0 1 2 2
+1	3624 9 0 0 0 0 1 0 0 0 0
+2	3633 9 0 0 0 0 1 0 0 0 0
+3	3642 9 0 0 0 0 1 0 0 0 0
+4	3651 9 0 0 0 0 1 0 0 0 0
+5	3660 9 0 0 0 0 1 0 0 0 0
+6	3669 9 0 0 0 0 1 0 0 0 0
+7	3678 9 0 0 0 0 1 0 0 0 0
+8	3687 9 0 0 0 0 1 0 0 0 0
+9	3696 9 0 0 0 0 1 0 0 0 0
+10	3705 10 0 0 0 0 1 0 0 0 0
+11	3715 10 0 0 0 0 1 0 0 0 0
+12	3725 10 0 0 0 0 1 0 0 0 0
+13	3735 10 0 0 0 0 1 0 0 0 0
+14	3745 10 0 0 0 0 1 0 0 0 0
+15	3755 10 0 0 0 0 1 0 0 0 0
+16	3765 56 0 3 0 0.215936004853 3 0 1 1 1
+17	3821 10 0 0 0 0 1 0 0 0 0
+18	3831 33 0 5 0 0.636712281684 2 0 1 1 1
+19	3864 10 0 0 0 0 1 0 0 0 0
+20	3874 10 0 0 0 0 1 0 0 0 0
