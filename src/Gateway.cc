@@ -4,21 +4,19 @@ namespace lora {
 
 Define_Module(Gateway);
 
-Gateway::Gateway()
-{
+Gateway::Gateway() {
     endRxEvent = nullptr;
 }
 
-Gateway::~Gateway()
-{
+Gateway::~Gateway() {
     cancelAndDelete(endRxEvent);
 }
 
-void Gateway::initialize()
-{
+void Gateway::initialize() {
     channelStateSignal = registerSignal("channelState");
     endRxEvent = new cMessage("end-reception");
-    channelBusy = false;
+    channelBusy = false; //in the beginning channel is available
+    //
     emit(channelStateSignal, IDLE);
 
     gate("in")->setDeliverOnReceptionStart(true);
@@ -36,8 +34,7 @@ void Gateway::initialize()
     emit(receiveBeginSignal, 0L);
 }
 
-void Gateway::handleMessage(cMessage *msg)
-{
+void Gateway::handleMessage(cMessage *msg) {
     if (msg == endRxEvent) {
         EV << "reception finished\n";
         channelBusy = false;
@@ -51,8 +48,7 @@ void Gateway::handleMessage(cMessage *msg)
             emit(receiveSignal, &tmp);
             // end of reception now
             emit(receiveSignal, 0);
-        }
-        else {
+        } else {
             // start of collision at recvStartTime
             cTimestampedValue tmp(recvStartTime, currentCollisionNumFrames);
             emit(collisionSignal, &tmp);
@@ -63,8 +59,7 @@ void Gateway::handleMessage(cMessage *msg)
         currentCollisionNumFrames = 0;
         receiveCounter = 0;
         emit(receiveBeginSignal, receiveCounter);
-    }
-    else {
+    } else {
         cPacket *pkt = check_and_cast<cPacket *>(msg);
 
         ASSERT(pkt->isReceptionStart());
@@ -78,8 +73,7 @@ void Gateway::handleMessage(cMessage *msg)
             channelBusy = true;
             emit(channelStateSignal, TRANSMISSION);
             scheduleAt(endReceptionTime, endRxEvent);
-        }
-        else {
+        } else {
             EV << "another frame arrived while receiving -- collision!\n";
             emit(channelStateSignal, COLLISION);
 
@@ -96,7 +90,8 @@ void Gateway::handleMessage(cMessage *msg)
             // update network graphics
             if (hasGUI()) {
                 char buf[32];
-                sprintf(buf, "Collision! (%ld frames)", currentCollisionNumFrames);
+                sprintf(buf, "Collision! (%ld frames)",
+                        currentCollisionNumFrames);
                 bubble(buf);
             }
         }
@@ -105,29 +100,27 @@ void Gateway::handleMessage(cMessage *msg)
     }
 }
 
-void Gateway::refreshDisplay() const
-{
+void Gateway::refreshDisplay() const {
     if (!channelBusy) {
         getDisplayString().setTagArg("i2", 0, "status/off");
         getDisplayString().setTagArg("t", 0, "");
-    }
-    else if (currentCollisionNumFrames == 0) {
+    } else if (currentCollisionNumFrames == 0) {
         getDisplayString().setTagArg("i2", 0, "status/yellow");
         getDisplayString().setTagArg("t", 0, "RECEIVE");
         getDisplayString().setTagArg("t", 2, "#808000");
-    }
-    else {
+    } else {
         getDisplayString().setTagArg("i2", 0, "status/red");
         getDisplayString().setTagArg("t", 0, "COLLISION");
         getDisplayString().setTagArg("t", 2, "#800000");
     }
 }
 
-void Gateway::finish()
-{
+void Gateway::finish() {
     EV << "duration: " << simTime() << endl;
 
     recordScalar("duration", simTime());
 }
 
-}; //namespace
+}
+;
+//namespace
