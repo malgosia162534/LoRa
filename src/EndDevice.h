@@ -26,6 +26,10 @@ private:
     simsignal_t stateSignal;
     int pkCounter;
 
+    //ToA
+    int NP,SW,PL,CRC,IH,DE;
+    double CR;
+
 public:
     EndDevice();
     virtual ~EndDevice();

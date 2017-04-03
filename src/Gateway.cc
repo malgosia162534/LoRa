@@ -16,7 +16,6 @@ void Gateway::initialize() {
     channelStateSignal = registerSignal("channelState");
     endRxEvent = new cMessage("end-reception");
     channelBusy = false; //in the beginning channel is available
-    //
     emit(channelStateSignal, IDLE);
 
     gate("in")->setDeliverOnReceptionStart(true);

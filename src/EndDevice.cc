@@ -88,7 +88,9 @@ void EndDevice::refreshDisplay() const {
         getDisplayString().setTagArg("t", 0, "TRANSMIT");
     }
 }
+double EndDevice::timeOnAir(){
 
+}
 }
 ;
 //namespace

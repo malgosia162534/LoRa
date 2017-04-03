@@ -3,10 +3,10 @@ package simulations;
 network Lora
 {
     parameters:
-        int numHosts;  // number of hosts
-        int numGatewats; 	//number of gateways
-        double txRate @unit(bps);  // transmission rate
-        double slotTime @unit(ms);  // zero means no slots (pure Aloha)
+        //int numHosts;  // number of hosts
+        //int numGatewats; 	//number of gateways
+       // double txRate @unit(bps);  // transmission rate
+      //  double slotTime @unit(ms);  // zero means no slots (pure Aloha)
         double bandwidth @unit(Hz);	//bandwidth - 125 kHz, 250 kHz
         int sf;
 
