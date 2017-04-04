@@ -13,24 +13,24 @@ EndDevice::~EndDevice() {
 }
 
 void EndDevice::initialize() {
-    stateSignal = registerSignal("state");
+    //stateSignal = registerSignal("state");
     gateway = getModuleByPath("gateway");
     if (!gateway)
         throw cRuntimeError("gateway not found");
 
-    txRate = par("txRate");
-    radioDelay = par("radioDelay");
+    //txRate = par("txRate");
+    //radioDelay = par("radioDelay");
     iaTime = &par("iaTime");
     packetLength = &par("packetLengthBits");
 
-    slotTime = par("slotTime");
-    isSlotted = slotTime > 0;
-    WATCH(slotTime);
-    WATCH(isSlotted);
+    //slotTime = par("slotTime");
+    //isSlotted = slotTime > 0;
+    //WATCH(slotTime);
+    //WATCH(isSlotted);
 
     endTxEvent = new cMessage("send/endTx");
     state = IDLE;
-    emit(stateSignal, state);
+   // emit(stateSignal, state);
     pkCounter = 0;
     WATCH((int& )state);
     WATCH(pkCounter);
@@ -48,18 +48,18 @@ void EndDevice::handleMessage(cMessage *msg) {
         EV << "generating packet " << pkname << endl;
 
         state = TRANSMIT;
-        emit(stateSignal, state);
+      //  emit(stateSignal, state);
 
         cPacket *pk = new cPacket(pkname);
         pk->setBitLength(packetLength->longValue());
-        simtime_t duration = pk->getBitLength() / txRate;
+        simtime_t duration = pk->getBitLength()/2.0;
         sendDirect(pk, radioDelay, duration, gateway->gate("in"));
 
         scheduleAt(simTime() + duration, endTxEvent);
     } else if (state == TRANSMIT) {
         // endTxEvent indicates end of transmission
         state = IDLE;
-        emit(stateSignal, state);
+      //  emit(stateSignal, state);
 
         // schedule next sending
         scheduleAt(getNextTransmissionTime(), endTxEvent);

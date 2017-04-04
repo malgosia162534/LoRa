@@ -3,14 +3,14 @@ package simulations;
 simple EndDevice
 {
     parameters:
-        @signal[state](type="long");
+       // @signal[state](type="long");
         
         
-        double txRate @unit(bps);         // transmission rate
-        double radioDelay @unit(s);       // propagation delay of radio link
+      //  double txRate @unit(bps);         // transmission rate
+   //     double radioDelay @unit(s);       // propagation delay of radio link
         volatile int packetLengthBits @unit(bit);  // packet length in bits
         volatile double iaTime @unit(s);  // packet interarrival time
-        double slotTime @unit(s);         // zero means no slots (pure Aloha)
+    //    double slotTime @unit(s);         // zero means no slots (pure Aloha)
         @display("i=device/pc_s");
 
         //parameters to calculate ToA

@@ -13,10 +13,10 @@ Gateway::~Gateway() {
 }
 
 void Gateway::initialize() {
-    channelStateSignal = registerSignal("channelState");
+    //channelStateSignal = registerSignal("channelState");
     endRxEvent = new cMessage("end-reception");
     channelBusy = false; //in the beginning channel is available
-    emit(channelStateSignal, IDLE);
+    //emit(channelStateSignal, IDLE);
 
     gate("in")->setDeliverOnReceptionStart(true);
 
@@ -24,57 +24,57 @@ void Gateway::initialize() {
     receiveCounter = 0;
     WATCH(currentCollisionNumFrames);
 
-    receiveBeginSignal = registerSignal("receiveBegin");
-    receiveSignal = registerSignal("receive");
-    collisionSignal = registerSignal("collision");
-    collisionLengthSignal = registerSignal("collisionLength");
+   // receiveBeginSignal = registerSignal("receiveBegin");
+  //  receiveSignal = registerSignal("receive");
+   // collisionSignal = registerSignal("collision");
+  //  collisionLengthSignal = registerSignal("collisionLength");
 
-    emit(receiveSignal, 0L);
-    emit(receiveBeginSignal, 0L);
+  //  emit(receiveSignal, 0L);
+  //  emit(receiveBeginSignal, 0L);
 }
 
 void Gateway::handleMessage(cMessage *msg) {
     if (msg == endRxEvent) {
         EV << "reception finished\n";
         channelBusy = false;
-        emit(channelStateSignal, IDLE);
+       // emit(channelStateSignal, IDLE);
 
         // update statistics
         simtime_t dt = simTime() - recvStartTime;
         if (currentCollisionNumFrames == 0) {
             // start of reception at recvStartTime
             cTimestampedValue tmp(recvStartTime, 1l);
-            emit(receiveSignal, &tmp);
+          //  emit(receiveSignal, &tmp);
             // end of reception now
-            emit(receiveSignal, 0);
+          //  emit(receiveSignal, 0);
         } else {
             // start of collision at recvStartTime
             cTimestampedValue tmp(recvStartTime, currentCollisionNumFrames);
-            emit(collisionSignal, &tmp);
+         //   emit(collisionSignal, &tmp);
 
-            emit(collisionLengthSignal, dt);
+       //     emit(collisionLengthSignal, dt);
         }
 
         currentCollisionNumFrames = 0;
         receiveCounter = 0;
-        emit(receiveBeginSignal, receiveCounter);
+      //  emit(receiveBeginSignal, receiveCounter);
     } else {
         cPacket *pkt = check_and_cast<cPacket *>(msg);
 
         ASSERT(pkt->isReceptionStart());
         simtime_t endReceptionTime = simTime() + pkt->getDuration();
 
-        emit(receiveBeginSignal, ++receiveCounter);
+      //  emit(receiveBeginSignal, ++receiveCounter);
 
         if (!channelBusy) {
             EV << "started receiving\n";
             recvStartTime = simTime();
             channelBusy = true;
-            emit(channelStateSignal, TRANSMISSION);
+         //   emit(channelStateSignal, TRANSMISSION);
             scheduleAt(endReceptionTime, endRxEvent);
         } else {
             EV << "another frame arrived while receiving -- collision!\n";
-            emit(channelStateSignal, COLLISION);
+           // emit(channelStateSignal, COLLISION);
 
             if (currentCollisionNumFrames == 0)
                 currentCollisionNumFrames = 2;
@@ -117,7 +117,7 @@ void Gateway::refreshDisplay() const {
 void Gateway::finish() {
     EV << "duration: " << simTime() << endl;
 
-    recordScalar("duration", simTime());
+ //   recordScalar("duration", simTime());
 }
 
 }
