@@ -4,120 +4,132 @@ namespace lora {
 
 Define_Module(Gateway);
 
-Gateway::Gateway() {
-    endRxEvent = nullptr;
-}
+/*Gateway::Gateway() {
+ endRxEvent = nullptr;
+ }
 
-Gateway::~Gateway() {
-    cancelAndDelete(endRxEvent);
-}
+ Gateway::~Gateway() {
+ cancelAndDelete(endRxEvent);
+ }*/
 
 void Gateway::initialize() {
-    //channelStateSignal = registerSignal("channelState");
-    endRxEvent = new cMessage("end-reception");
-    channelBusy = false; //in the beginning channel is available
-    //emit(channelStateSignal, IDLE);
+    endReceivedMessage = new cMessage("end-receiving");
+    ack1=new cMessage("ack1");
 
-    gate("in")->setDeliverOnReceptionStart(true);
+    // Assign collision number on each channel to zero.
+    collisionChannel868_1 = 0;
+    collisionChannel868_3 = 0;
+    collisionChannel868_5 = 0;
 
-    currentCollisionNumFrames = 0;
-    receiveCounter = 0;
-    WATCH(currentCollisionNumFrames);
+    // In the beginning all three channels are available.
+    channelBusy868_1 = false;
+    channelBusy868_3 = false;
+    channelBusy868_5 = false;
 
-   // receiveBeginSignal = registerSignal("receiveBegin");
-  //  receiveSignal = registerSignal("receive");
-   // collisionSignal = registerSignal("collision");
-  //  collisionLengthSignal = registerSignal("collisionLength");
+    // Normally the packet object gets delivered to the destination module at the simulation time
+    // that corresponds to finishing the reception of the message (ie. the arrival of its last bit).
+    // It can be changed with setDeliverOnReceptionStart() method.
+    //gate("in")->setDeliverOnReceptionStart(true);
 
-  //  emit(receiveSignal, 0L);
-  //  emit(receiveBeginSignal, 0L);
+    receive_delay1 = getParentModule()->par("receive_delay1");
+    receive_delay2 = getParentModule()->par("receive_delay2");
+
+    // Declaring the gateway module
+    gateway = getModuleByPath("gateway");
+    if (!gateway)
+        throw cRuntimeError("Gateway module not found");
+
+    // Declaring the endDevice module
+   /* endDevice = getModuleByPath("endDevice");
+    if (!endDevice)
+        throw cRuntimeError("EndDevice module not found");
+*/
+    ackTime = 0.0;
+
 }
 
 void Gateway::handleMessage(cMessage *msg) {
-    if (msg == endRxEvent) {
-        EV << "reception finished\n";
-        channelBusy = false;
-       // emit(channelStateSignal, IDLE);
-
-        // update statistics
-        simtime_t dt = simTime() - recvStartTime;
-        if (currentCollisionNumFrames == 0) {
-            // start of reception at recvStartTime
-            cTimestampedValue tmp(recvStartTime, 1l);
-          //  emit(receiveSignal, &tmp);
-            // end of reception now
-          //  emit(receiveSignal, 0);
-        } else {
-            // start of collision at recvStartTime
-            cTimestampedValue tmp(recvStartTime, currentCollisionNumFrames);
-         //   emit(collisionSignal, &tmp);
-
-       //     emit(collisionLengthSignal, dt);
-        }
-
-        currentCollisionNumFrames = 0;
-        receiveCounter = 0;
-      //  emit(receiveBeginSignal, receiveCounter);
+    if (msg == endReceivedMessage) {
+        EV << "Here we will send ACK"<<endl;
     } else {
+        bubble("ARRIV");
+
         cPacket *pkt = check_and_cast<cPacket *>(msg);
 
-        ASSERT(pkt->isReceptionStart());
-        simtime_t endReceptionTime = simTime() + pkt->getDuration();
+        //Gettin parameters from received message.
+        //Used channel.
+        channelNumber = msg->par("channelNumber").doubleValue();
+        EV << "channel Number in Gateway -> " << channelNumber << endl;
+        // TimeOnAir value for specific message.
+        simtime_t duration = msg->par("timeOnAirValue").doubleValue();
+        receiveEndTime = simTime() + duration;
+        EV << "Gateway received the message\t at time" << receiveEndTime
+                  << endl;
 
-      //  emit(receiveBeginSignal, ++receiveCounter);
+        // Randomly gateway will decide in which receive window will send confirmation.
+        int temp = rand() / (RAND_MAX + 1.);
+        // Gateway will answer in RX1
+        if (temp > 0 and temp <= 0.5) {
+            ackTime = receive_delay1;
+        }
+        // Gateway will answer in RX2
+        else {
+            ackTime = receive_delay2;
+        }
 
-        if (!channelBusy) {
-            EV << "started receiving\n";
-            recvStartTime = simTime();
-            channelBusy = true;
-         //   emit(channelStateSignal, TRANSMISSION);
-            scheduleAt(endReceptionTime, endRxEvent);
-        } else {
-            EV << "another frame arrived while receiving -- collision!\n";
-           // emit(channelStateSignal, COLLISION);
+        //Based on the channel in which End Device send a message we will decide about collisions and Rx windows.
 
-            if (currentCollisionNumFrames == 0)
-                currentCollisionNumFrames = 2;
-            else
-                currentCollisionNumFrames++;
+        //End device uses channel 868_1 to transmit message.
+        if (channelNumber == 868.1) {
 
-            if (endReceptionTime > endRxEvent->getArrivalTime()) {
-                cancelEvent(endRxEvent);
-                scheduleAt(endReceptionTime, endRxEvent);
-            }
+            if (channelBusy868_1 == false) // Channel 868_1 is not busy we can receive the packet
+                    {
+                EV << "No collision\n";
+                // We can set up RX windows.
+//            receiveEndTime = simTime()+duration;
+                channelBusy868_1 = true;
+                scheduleAt(receiveEndTime, endReceivedMessage);
 
-            // update network graphics
-            if (hasGUI()) {
-                char buf[32];
-                sprintf(buf, "Collision! (%ld frames)",
-                        currentCollisionNumFrames);
-                bubble(buf);
+            } else // Channel 868_1 is busy. Collision happens.
+            {
+                EV << "Collision happened\n";
+                collisionChannel868_1++;
+                if (receiveEndTime > endReceivedMessage->getArrivalTime()) {
+                    scheduleAt(receiveEndTime, endReceivedMessage);
+                }
             }
         }
-        channelBusy = true;
+        //End device uses channel 868.3 to transmit message.
+        else if (channelNumber == 868.3) {
+            if (channelBusy868_3 == false) // Channel 868.3 is not busy we can receive the packet
+                    {
+
+            } else // Channel 868.3 is busy. Collision happens.
+            {
+                collisionChannel868_3++;
+            }
+        }
+        //End device uses channel 868.5 to transmit message.
+        else if (channelNumber == 868.5) {
+            if (channelBusy868_5 == false) // Channel 868.5 is not busy we can receive the packet
+                    {
+
+            } else // Channel 868.5 is busy. Collision happens.
+            {
+                collisionChannel868_5++;
+            }
+        } else {
+            EV << "Incorrect channel number\n";
+        }
         delete pkt;
     }
-}
 
-void Gateway::refreshDisplay() const {
-    if (!channelBusy) {
-        getDisplayString().setTagArg("i2", 0, "status/off");
-        getDisplayString().setTagArg("t", 0, "");
-    } else if (currentCollisionNumFrames == 0) {
-        getDisplayString().setTagArg("i2", 0, "status/yellow");
-        getDisplayString().setTagArg("t", 0, "RECEIVE");
-        getDisplayString().setTagArg("t", 2, "#808000");
-    } else {
-        getDisplayString().setTagArg("i2", 0, "status/red");
-        getDisplayString().setTagArg("t", 0, "COLLISION");
-        getDisplayString().setTagArg("t", 2, "#800000");
-    }
 }
+void Gateway::receiveMessage() {
 
+}
 void Gateway::finish() {
-    EV << "duration: " << simTime() << endl;
-
- //   recordScalar("duration", simTime());
+    EV << "\nDuration: " << simTime() << endl;
 }
 
 }
