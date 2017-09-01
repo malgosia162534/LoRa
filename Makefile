@@ -29,10 +29,11 @@ PROJECTRELATIVE_PATH =
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/src/EndDevice.o $O/src/Gateway.o
+OBJS = $O/loraChannel.o $O/src/EndDevice.o $O/src/Gateway.o $O/loraPck_m.o
 
 # Message files
-MSGFILES =
+MSGFILES = \
+    loraPck.msg
 
 # SM files
 SMFILES =
@@ -128,8 +129,15 @@ depend:
 	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES) $(SM_CC_FILES)  ./*.cc results/*.cc simulations/*.cc src/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
+$O/loraChannel.o: loraChannel.cc \
+	loraChannel.h
+$O/loraPck_m.o: loraPck_m.cc \
+	loraPck_m.h
 $O/src/EndDevice.o: src/EndDevice.cc \
+	loraChannel.h \
+	loraPck_m.h \
 	src/EndDevice.h
 $O/src/Gateway.o: src/Gateway.cc \
+	loraPck_m.h \
 	src/Gateway.h
 

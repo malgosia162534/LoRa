@@ -1,0 +1,114 @@
+version 2
+run Scenario0-0-20170901-22:41:20-7208
+attr configname Scenario0
+attr datetime 20170901-22:41:20
+attr experiment Scenario0
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvars2 $repetition=0
+attr measurement ""
+attr network simulations.Lora
+attr processid 7208
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+param Lora.CR 4
+param Lora.GL 0
+param Lora.LpLd0 127.41
+param Lora.bandwidth 125000
+param Lora.d0 40.0
+param Lora.endDevice[*].iaTime exponential(0.2s)
+param Lora.endDevice[*].packetSize 20
+param Lora.gamma 2.08
+param Lora.minsensitivity -133.25
+param Lora.numGateways 4
+param Lora.numHosts 200
+param Lora.spreadingFactor 12
+param Lora.txPow 14
+
+scalar Lora.gateway[0] 	duration 	92.552
+scalar Lora.gateway[0] 	collisionsCH1 	498
+scalar Lora.gateway[0] 	collisionsCH2 	551
+scalar Lora.gateway[0] 	collisionsCH3 	570
+statistic Lora.gateway[0] 	serverChannelState:histogram
+field count 34594
+field mean 0.57018558131468
+field stddev 0.5819654806548
+field sum 19725
+field sqrsum 22963
+field min 0
+field max 2
+attr enum  IDLE=0,TRANSMISSION=1,COLLISION=2
+attr source  channelState
+attr title  "Channel state, histogram"
+bin	-INF	0
+bin	-1	0
+bin	0	16488
+bin	1	16487
+bin	2	1619
+bin	3	0
+scalar Lora.gateway[1] 	duration 	92.552
+scalar Lora.gateway[1] 	collisionsCH1 	303
+scalar Lora.gateway[1] 	collisionsCH2 	290
+scalar Lora.gateway[1] 	collisionsCH3 	292
+statistic Lora.gateway[1] 	serverChannelState:histogram
+field count 25306
+field mean 0.55243815695882
+field stddev 0.56321102737787
+field sum 13980
+field sqrsum 15750
+field min 0
+field max 2
+attr enum  IDLE=0,TRANSMISSION=1,COLLISION=2
+attr source  channelState
+attr title  "Channel state, histogram"
+bin	-INF	0
+bin	-1	0
+bin	0	12211
+bin	1	12210
+bin	2	885
+bin	3	0
+scalar Lora.gateway[2] 	duration 	92.552
+scalar Lora.gateway[2] 	collisionsCH1 	163
+scalar Lora.gateway[2] 	collisionsCH2 	169
+scalar Lora.gateway[2] 	collisionsCH3 	163
+statistic Lora.gateway[2] 	serverChannelState:histogram
+field count 19573
+field mean 0.53793491033567
+field stddev 0.54695164973399
+field sum 10529
+field sqrsum 11519
+field min 0
+field max 2
+attr enum  IDLE=0,TRANSMISSION=1,COLLISION=2
+attr source  channelState
+attr title  "Channel state, histogram"
+bin	-INF	0
+bin	-1	0
+bin	0	9539
+bin	1	9539
+bin	2	495
+bin	3	0
+scalar Lora.gateway[3] 	duration 	92.552
+scalar Lora.gateway[3] 	collisionsCH1 	537
+scalar Lora.gateway[3] 	collisionsCH2 	549
+scalar Lora.gateway[3] 	collisionsCH3 	519
+statistic Lora.gateway[3] 	serverChannelState:histogram
+field count 34877
+field mean 0.56902829945236
+field stddev 0.58076027507569
+field sum 19846
+field sqrsum 23056
+field min 0
+field max 2
+attr enum  IDLE=0,TRANSMISSION=1,COLLISION=2
+attr source  channelState
+attr title  "Channel state, histogram"
+bin	-INF	0
+bin	-1	0
+bin	0	16636
+bin	1	16636
+bin	2	1605
+bin	3	0

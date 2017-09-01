@@ -3,13 +3,31 @@ package simulations;
 simple EndDevice
 {
     parameters:
-        @signal[state](type="long");
-        @statistic[radioState](source="state";title="Radio state";enum="IDLE=0,TRANSMIT=1";record=vector);
-        double txRate @unit(bps);         // transmission rate
-        double radioDelay @unit(s);       // propagation delay of radio link
-        volatile int pkLenBits @unit(b);  // packet length in bits
+        int posX = intuniform(1,1000);
+        int posY = intuniform(1,1000);
+        int packetSize;  // packet length in bits
         volatile double iaTime @unit(s);  // packet interarrival time
-        double slotTime @unit(s);         // zero means no slots (pure Aloha)
-        @display("i=device/pc_s");
+
+        @display("i=old/ball_vs");//i2=old/x_blank");
+
+        //Signals and statistics for EndDevice state
+        @signal[state](type="long");
+        @statistic[CH1state](source="state"; title="Channel_1 state"; enum="IDLE=0,BUSY=1,TRANSMITTING=2"; record=vector);
+        //Signals and statistics for EndDevice used channel
+        @signal[usedChannel](type="long");
+        @statistic[usedCh](title="UsedChannel"; record=vector; source="usedChannel");
+        
+        //Signals and statistics about sent and lost messages
+        @signal[Sentmessages](type="long");
+        @statistic[SentmessagesStats](title="Sentmessages"; record=vector,vector; source="Sentmessages");
+        @signal[Lostmessages](type="long");
+        @statistic[LostmessagesStats](title="Lostmessages"; record=vector,vector; source="Lostmessages");
+
+
+
+    gates:
+        input in @directIn;
+
+
 }
 
