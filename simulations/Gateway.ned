@@ -3,20 +3,32 @@ package simulations;
 simple Gateway
 {
     parameters:
-        @display("i=device/antennatower_l");
-        @signal[receiveBegin](type="long");  // increases with each new frame arriving to the server and drops to 0 if the channel becomes finally idle
-        @signal[receive](type="long");  // for successful receptions (non-collisions): 1 at the start of the reception, 0 at the end of the reception
-        @signal[collision](type="long"); // the number of collided frames at the beginning of the collision period
-        @signal[collisionLength](type="simtime_t");  // the length of the last collision period at the end of the collision period
-        @signal[channelState](type="long");
+        int posX = intuniform(1,1000);
+        int posY = intuniform(1,1000);
+        int spreadingFactor = intuniform(6, 13);
+        double bandwidth @unit(Hz) = 125kHz;	//bandwidth - 125 kHz, 250 kHz
+        @display("i=device/antennatower_l;i2=old/x_blank");
 
-        @statistic[serverChannelState](source="channelState";title="Channel state";enum="IDLE=0,TRANSMISSION=1,COLLISION=2";record=vector);
-        @statistic[receiveBegin](source="receiveBegin"; record=vector?; interpolationmode=sample-hold; title="receive begin");
-        @statistic[channelUtilization](source="timeavg(receive)"; record=last; interpolationmode=linear; title="channel utilization");
-        @statistic[collisionMultiplicity](source=collision; record=vector?,histogram; title="collision multiplicity");
-        @statistic[collisionLength](record=vector?,histogram,mean,sum,max; title="collision length");
-        @statistic[receivedFrames](source="sum(receive)"; record=last; title="received frames");
-        @statistic[collidedFrames](source="sum(collision)"; record=last; title="collided frames");
+        //Signals for collision
+        @signal[collisionCH1](type="long");
+        @signal[collisionCH2](type="long");
+        @signal[collisionCH3](type="long");
+        //Statistics for collision
+        @statistic[collision1](title="collisionCH1"; record=vector; source="collisionCH1");
+        @statistic[collision2](title="collisionCH2"; record=vector; source="collisionCH2");
+        @statistic[collision3](title="collisionCH3"; record=vector; source="collisionCH3");
+        //Statistics and signals for channel State
+        @signal[channelState](type="long");
+        @statistic[serverChannelState](source="channelState"; title="Channel state"; enum="IDLE=0,TRANSMISSION=1,COLLISION=2"; record=histogram);
+        //Signals for received messages
+        @signal[receivedCH1](type="long");
+        @signal[receivedCH2](type="long");
+        @signal[receivedCH3](type="long");
+        //Statistics for collision
+        @statistic[received1](title="receivedCH1"; record=vector; source="receivedCH1");
+        @statistic[received2](title="receivedCH2"; record=vector; source="receivedCH2");
+        @statistic[received3](title="receivedCH3"; record=vector; source="receivedCH3");
+
     gates:
         input in @directIn;
 }
